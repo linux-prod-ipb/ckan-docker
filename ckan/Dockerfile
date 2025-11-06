@@ -10,6 +10,17 @@ COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/* /docker-entrypoint.d/
 # runtime mounted ones)
 COPY --chown=ckan-sys:ckan-sys patches ${APP_DIR}/patches
 
+COPY --chown=ckan:ckan-sys cert/* cert/
+
+USER root
+RUN apt-get update && apt-get install -y \
+    xmlsec1 \
+    && rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/linux-prod-ipb/ckanext-saml2auth.git \
+    && cd ckanext-saml2auth \
+    && python setup.py develop \
+    && pip install -r dev-requirements.txt
+
 USER ckan
 
 RUN for d in $APP_DIR/patches/*; do \
