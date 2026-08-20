@@ -27,6 +27,7 @@ services:
       dockerfile: Dockerfile
       args:
         - TZ=${TZ}
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
     networks:
       - ckannet
       - dbnet
@@ -114,3 +115,5 @@ networks:
     internal: true
   redisnet:
     internal: true
+
+

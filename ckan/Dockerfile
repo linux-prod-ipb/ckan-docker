@@ -18,8 +18,19 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/linux-prod-ipb/ckanext-saml2auth.git \
     && cd ckanext-saml2auth \
-    && python setup.py develop \
-    && pip install -r dev-requirements.txt
+    && pip install -e . \
+    && if [ -f requirements.txt ]; then pip install -r requirements.txt; fi \
+    && if [ -f dev-requirements.txt ]; then pip install -r dev-requirements.txt; fi
+
+ARG GITHUB_TOKEN
+RUN if [ -n "$GITHUB_TOKEN" ]; then \
+        git clone https://${GITHUB_TOKEN}@github.com/linux-prod-ipb/ckanext-ipb_dataverse_theme.git; \
+    else \
+        git clone https://github.com/linux-prod-ipb/ckanext-ipb_dataverse_theme.git; \
+    fi \
+    && cd ckanext-ipb_dataverse_theme \
+    && pip install -e . \
+    && if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
 USER ckan
 

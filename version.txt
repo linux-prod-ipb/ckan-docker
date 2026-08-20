@@ -1,0 +1,1 @@
+master: [c82ad2b] add folder cert for certificate file, add clone extension ckanext-saml2auth
